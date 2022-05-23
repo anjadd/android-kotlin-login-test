@@ -20,9 +20,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceFragmentCompat
+import com.example.android.firebaseui_login_sample.LoginViewModel.AuthenticationState.*
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -39,5 +40,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /* If an unauthenticated user tries to access Settings screen, they should be redirected
+         * to the Login screen and go through the sign in flow. */
+        viewModel.authenticationState.observe(viewLifecycleOwner) { authenticationState ->
+            when (authenticationState) {
+                AUTHENTICATED -> Log.i(TAG, "Authenticated user")
+                UNAUTHENTICATED -> findNavController().navigate(R.id.loginFragment)
+                else -> Log.i(TAG, "Invalid authentication")
+            }
+        }
     }
 }

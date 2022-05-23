@@ -20,13 +20,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.example.android.firebaseui_login_sample.LoginViewModel.AuthenticationState.*
@@ -48,7 +47,7 @@ class MainFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
 
         // Remove the two lines below once observeAuthenticationState is implemented.
@@ -65,6 +64,10 @@ class MainFragment : Fragment() {
         binding.authButton.setOnClickListener {
             // Call launchSignInFlow when authButton is clicked
             launchSignInFlow()
+        }
+
+        binding.settingsButton.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
         }
     }
 
