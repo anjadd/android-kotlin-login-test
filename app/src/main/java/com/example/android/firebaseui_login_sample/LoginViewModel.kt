@@ -48,10 +48,9 @@ class LoginViewModel : ViewModel() {
     creating this variable, other classes will be able to query for whether the user is logged
     in or not. */
     val authenticationState = FirebaseUserLiveData().map { user ->
-        if(user != null){
+        if (user != null) {
             AuthenticationState.AUTHENTICATED
-        }
-        else{
+        } else {
             AuthenticationState.UNAUTHENTICATED
         }
     }
@@ -67,6 +66,12 @@ class LoginViewModel : ViewModel() {
         val defaultFactType = context.resources.getStringArray(R.array.fact_type)[0]
         val funFactType = sharedPreferences.getString(factTypePreferenceKey, defaultFactType)
 
-        return androidFacts[Random.nextInt(0, androidFacts.size)]
+        return if (funFactType == context.getString(R.string.fact_type_android) ||
+            authenticationState.value == AuthenticationState.UNAUTHENTICATED
+        ) {
+            androidFacts[Random.nextInt(0, androidFacts.size)]
+        } else {
+            californiaFacts[Random.nextInt(0, californiaFacts.size)]
+        }
     }
 }
